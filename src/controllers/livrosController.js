@@ -3,7 +3,7 @@ import livros from "../models/Livro.js";
 class LivroController {
   static getBooks = async (req, res) => {
     try {
-      const livrosResultado = await livros.find();
+      const livrosResultado = await livros.find().populate("autor").exec();
       res.json(livrosResultado);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -31,7 +31,7 @@ class LivroController {
   static getBook = async (req, res) => {
     try {
       const { id } = req.params;
-      const livro = await livros.findById(id);
+      const livro = await livros.findById(id).populate("autor", "nome").exec();
       res.json(livro);
     } catch (err) {
       res
@@ -48,6 +48,17 @@ class LivroController {
       res
         .status(500)
         .json({ message: `${err.message} - Não foi possível excluir!` });
+    }
+  };
+  static getBookByPublisher = async (req, res) => {
+    try {
+      const { editora } = req.query;
+      const livro = await livros.find({ editora: editora }, {});
+      res.json(livro);
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: `${err.message} - Livro não encontrado!` });
     }
   };
 }
