@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 
-mongoose.connect(
-  "mongodb+srv://phlima3:123@api-node-express.e95l9rm.mongodb.net/projeto-node"
-);
+mongoose.connect(process.env.STRING_CONEXAO_DB);
 
 let db = mongoose.connection;
 
